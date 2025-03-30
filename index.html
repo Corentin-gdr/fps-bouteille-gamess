@@ -14,6 +14,18 @@
       font-family: sans-serif;
       z-index: 10;
     }
+    #crosshair {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      margin-left: -5px;
+      margin-top: -5px;
+      background: white;
+      border-radius: 50%;
+      z-index: 20;
+    }
   </style>
 </head>
 <body>
@@ -21,8 +33,8 @@
     Clique pour jouer<br />
     ZQSD pour bouger — Souris pour viser — Clic gauche pour tirer
   </div>
+  <div id="crosshair"></div>
 
-  <!-- ✅ Three.js classique -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/PointerLockControls.js"></script>
 
@@ -56,7 +68,6 @@
       floor.rotation.x = -Math.PI / 2;
       scene.add(floor);
 
-      // Cibles rouges
       for (let i = 0; i < 10; i++) {
         const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
         const boxMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
@@ -66,14 +77,12 @@
         objects.push(box);
       }
 
-      // Arme (boîte grise devant la caméra)
       const weaponGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.5);
       const weaponMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 });
       const weapon = new THREE.Mesh(weaponGeometry, weaponMaterial);
       weapon.position.set(0.3, -0.3, -0.5);
       camera.add(weapon);
 
-      // Déplacements
       document.addEventListener('keydown', (e) => {
         switch (e.code) {
           case 'KeyZ': moveForward = true; break;
