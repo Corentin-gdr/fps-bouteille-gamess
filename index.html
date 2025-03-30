@@ -84,6 +84,38 @@
       floor.rotation.x = -Math.PI / 2;
       scene.add(floor);
 
+      // Bouteille cartoon
+      const bottleMaterial = new THREE.MeshBasicMaterial({ color: 0xcccccc });
+      const bottleBody = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 2, 16), bottleMaterial);
+      bottleBody.position.set(0, 1, 0);
+      scene.add(bottleBody);
+
+      // Bras
+      const armMaterial = new THREE.MeshBasicMaterial({ color: 0xffcc00 });
+      const leftArm = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.8, 0.2), armMaterial);
+      leftArm.position.set(-0.6, 1.2, 0);
+      const rightArm = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.8, 0.2), armMaterial);
+      rightArm.position.set(0.6, 1.2, 0);
+      scene.add(leftArm);
+      scene.add(rightArm);
+
+      // Jambes
+      const legMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 });
+      const leftLeg = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.8, 0.2), legMaterial);
+      leftLeg.position.set(-0.2, 0.4, 0);
+      const rightLeg = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.8, 0.2), legMaterial);
+      rightLeg.position.set(0.2, 0.4, 0);
+      scene.add(leftLeg);
+      scene.add(rightLeg);
+
+      // Arme attachée à la caméra
+      const weaponGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.5);
+      const weaponMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 });
+      const weapon = new THREE.Mesh(weaponGeometry, weaponMaterial);
+      weapon.position.set(0.3, -0.3, -0.5);
+      camera.add(weapon);
+
+      // Cibles rouges
       for (let i = 0; i < 10; i++) {
         const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
         const boxMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
@@ -93,12 +125,7 @@
         objects.push(box);
       }
 
-      const weaponGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.5);
-      const weaponMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 });
-      const weapon = new THREE.Mesh(weaponGeometry, weaponMaterial);
-      weapon.position.set(0.3, -0.3, -0.5);
-      camera.add(weapon);
-
+      // Déplacements
       document.addEventListener('keydown', (e) => {
         switch (e.code) {
           case 'KeyZ': moveForward = true; break;
