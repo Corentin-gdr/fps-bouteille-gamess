@@ -22,15 +22,15 @@
     ZQSD pour bouger — Souris pour viser — Clic gauche pour tirer
   </div>
 
-  <script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.128/build/three.module.js';
-    import { PointerLockControls } from 'https://cdn.jsdelivr.net/npm/three@0.128/examples/jsm/controls/PointerLockControls.js';
+  <!-- ✅ Three.js classique -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/PointerLockControls.js"></script>
 
+  <script>
     let camera, scene, renderer, controls;
     let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false;
     let velocity = new THREE.Vector3();
     let prevTime = performance.now();
-
     const objects = [];
 
     init();
@@ -46,18 +46,17 @@
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(renderer.domElement);
 
-      controls = new PointerLockControls(camera, document.body);
+      controls = new THREE.PointerLockControls(camera, document.body);
       document.body.addEventListener('click', () => controls.lock());
       scene.add(controls.getObject());
 
-      // Sol
       const floorGeometry = new THREE.PlaneGeometry(1000, 1000);
       const floorMaterial = new THREE.MeshBasicMaterial({ color: 0x228b22 });
       const floor = new THREE.Mesh(floorGeometry, floorMaterial);
       floor.rotation.x = -Math.PI / 2;
       scene.add(floor);
 
-      // Cibles
+      // Cibles rouges
       for (let i = 0; i < 10; i++) {
         const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
         const boxMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
@@ -67,7 +66,7 @@
         objects.push(box);
       }
 
-      // Arme (cube tenu par la caméra)
+      // Arme (boîte grise devant la caméra)
       const weaponGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.5);
       const weaponMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 });
       const weapon = new THREE.Mesh(weaponGeometry, weaponMaterial);
@@ -75,30 +74,25 @@
       camera.add(weapon);
 
       // Déplacements
-      const onKeyDown = (e) => {
+      document.addEventListener('keydown', (e) => {
         switch (e.code) {
           case 'KeyZ': moveForward = true; break;
           case 'KeyS': moveBackward = true; break;
           case 'KeyQ': moveLeft = true; break;
           case 'KeyD': moveRight = true; break;
         }
-      };
-      const onKeyUp = (e) => {
+      });
+      document.addEventListener('keyup', (e) => {
         switch (e.code) {
           case 'KeyZ': moveForward = false; break;
           case 'KeyS': moveBackward = false; break;
           case 'KeyQ': moveLeft = false; break;
           case 'KeyD': moveRight = false; break;
         }
-      };
-      document.addEventListener('keydown', onKeyDown);
-      document.addEventListener('keyup', onKeyUp);
+      });
 
-      // Tir
       document.addEventListener('mousedown', (e) => {
-        if (e.button === 0) {
-          shoot();
-        }
+        if (e.button === 0) shoot();
       });
 
       window.addEventListener('resize', () => {
@@ -129,7 +123,6 @@
       velocity.z -= velocity.z * 10.0 * delta;
 
       const speed = 100.0;
-
       if (moveForward) velocity.z -= speed * delta;
       if (moveBackward) velocity.z += speed * delta;
       if (moveLeft) velocity.x -= speed * delta;
@@ -139,7 +132,6 @@
       controls.moveForward(-velocity.z * delta);
 
       prevTime = time;
-
       renderer.render(scene, camera);
     }
   </script>
